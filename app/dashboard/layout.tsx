@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import "@/app/globals.css";
+
+import Sidebar from "@/components/layout/Sidebar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Taski",
-  description: "Taski es una aplicación de gestión de tareas que te ayuda a completar tus objetivos.",
+  title: "Dashboard - Taski",
+  description: "Dashboard de Taski, donde puedes ver tus proyectos y tareas pendientes de una manera organizada.",
 };
 
 export default function RootLayout({
@@ -27,7 +29,10 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex h-screen p-4`}
       >
-          {children} 
+        <Sidebar />
+        <main className="flex-1">
+          {children}
+        </main>
       </body>
     </html>
   );
