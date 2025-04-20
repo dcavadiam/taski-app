@@ -1,13 +1,5 @@
 import { create } from "zustand";
-import { Task } from "../types";
-
-interface TaskStore {
-  tasks: Task[];
-  setTasks: (tasks: Task[]) => void;
-  addTask: (task: Task) => void;
-  updateTask: (task: Task) => void;
-  deleteTask: (id: string) => void;
-}
+import { Task, TaskStore } from "../types";
 
 export const useTaskStore = create<TaskStore>((set) => ({
   tasks: [],

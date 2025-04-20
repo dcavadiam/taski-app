@@ -8,6 +8,14 @@ export interface Task {
   priority: "Alta" | "Media" | "Baja";
 }
 
+export interface TaskStore {
+  tasks: Task[];
+  setTasks: (tasks: Task[]) => void;
+  addTask: (task: Task) => void;
+  updateTask: (task: Task) => void;
+  deleteTask: (id: string) => void;
+}
+
 export interface TaskFormProps {
   isOpen: boolean;
   onClose: () => void;
