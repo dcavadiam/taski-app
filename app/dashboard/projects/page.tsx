@@ -1,8 +1,10 @@
+import { Pencil, Plus, CheckCircle2, AlertCircle } from "lucide-react"
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Pencil, Plus, CheckCircle2, AlertCircle } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
+
 import { projects } from "@/features/projects/mocks/index"
 
 export default function ProjectsPage() {
