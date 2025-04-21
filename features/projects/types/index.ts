@@ -27,3 +27,8 @@ export interface ProjectCardHomeProps {
   title: string;
   url: string;
 }
+
+export interface CreateProjectModalProps {
+  project?: Project;
+  mode?: "create" | "edit";
+}

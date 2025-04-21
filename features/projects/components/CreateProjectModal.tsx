@@ -7,13 +7,9 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useProjectStore } from "../store/useProjectStore";
 import { Plus, Pencil } from "lucide-react";
-import { Project } from "../types";
+import { CreateProjectModalProps } from "../types";
 import { showSuccessToast, showErrorToast } from "@/lib/toast";
 
-interface CreateProjectModalProps {
-    project?: Project;
-    mode?: 'create' | 'edit';
-}
 
 export default function CreateProjectModal({ project, mode = 'create' }: CreateProjectModalProps) {
     const [open, setOpen] = useState(false);
