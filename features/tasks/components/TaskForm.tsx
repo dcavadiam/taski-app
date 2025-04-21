@@ -8,16 +8,20 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 
 import { useTaskStore } from "../store/useTaskStore"
+import { useProjectStore } from "@/features/projects/store/useProjectStore"
 import TaskStatusSelect from "./TaskStatusSelect"
 import { taskSchema, TaskFormData } from "../schemas/task.schema"
 import TaskPrioritySelect from "./TaskPrioritySelect"
 
 import { TaskFormProps } from "../types"
 
-import { toast } from "sonner"
+import { showSuccessToast, showErrorToast } from "@/lib/toast"
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
 
 export default function TaskForm({ isOpen, onClose, taskToEdit }: TaskFormProps) {
     const { addTask, updateTask } = useTaskStore()
+    const { projects } = useProjectStore()
+    const { updateProjectStats } = useProjectStore()
     const [formData, setFormData] = useState<Partial<TaskFormData>>({
         title: "",
         description: "",
@@ -32,40 +36,37 @@ export default function TaskForm({ isOpen, onClose, taskToEdit }: TaskFormProps)
         if (taskToEdit) {
             setFormData({
                 title: taskToEdit.title,
-                description: taskToEdit.description,
-                status: taskToEdit.status,
-                priority: taskToEdit.priority,
-                project: taskToEdit.project,
-                dueDate: taskToEdit.dueDate
+                description: taskToEdit.description || "",
+                status: taskToEdit.status || "Pendiente",
+                priority: taskToEdit.priority || "Media",
+                project: taskToEdit.project || "",
+                dueDate: taskToEdit.dueDate || ""
             })
         }
     }, [taskToEdit])
 
     const validateField = (field: keyof TaskFormData, value: unknown) => {
         try {
-            const fieldSchema = taskSchema.shape[field]
-            if (fieldSchema) {
-                fieldSchema.parse(value)
-                setErrors(prev => {
-                    const newErrors = { ...prev }
-                    delete newErrors[field]
-                    return newErrors
-                })
-                return true
+            if (value === "" && (field === "status" || field === "priority")) {
+                value = field === "status" ? "Pendiente" : "Media"
             }
-            return false
+            taskSchema.shape[field].parse(value)
+            setErrors(prev => {
+                const newErrors = { ...prev }
+                delete newErrors[field]
+                return newErrors
+            })
         } catch (error) {
             if (error instanceof ZodError) {
-                const message = error.errors[0]?.message || "Campo inválido"
                 setErrors(prev => ({
                     ...prev,
-                    [field]: message
+                    [field]: error.errors[0].message
                 }))
             }
         }
     }
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         try {
             const validatedData = taskSchema.parse({
@@ -75,20 +76,15 @@ export default function TaskForm({ isOpen, onClose, taskToEdit }: TaskFormProps)
 
             if (taskToEdit) {
                 updateTask(validatedData)
-                toast("Tarea actualizada correctamente", {
-                    action: {
-                        label: "Undo",
-                        onClick: () => console.log("Undo"),
-                    },
-                })
+                showSuccessToast("Tarea actualizada correctamente")
             } else {
                 addTask(validatedData)
-                toast("Tarea creada correctamente", {
-                    action: {
-                        label: "Undo",
-                        onClick: () => console.log("Undo"),
-                    },
-                })  
+                showSuccessToast("Tarea creada correctamente")
+            }
+
+            // Actualizar estadísticas del proyecto
+            if (validatedData.project) {
+                updateProjectStats(validatedData.project)
             }
 
             setFormData({
@@ -100,13 +96,14 @@ export default function TaskForm({ isOpen, onClose, taskToEdit }: TaskFormProps)
                 dueDate: ""
             })
             onClose()
-            
+
         } catch (error) {
             if (error instanceof Error) {
                 setErrors(prev => ({
                     ...prev,
                     form: error.message
                 }))
+                showErrorToast("Error al guardar la tarea")
             }
         }
     }
@@ -114,11 +111,11 @@ export default function TaskForm({ isOpen, onClose, taskToEdit }: TaskFormProps)
     return (
         <>
             <div
-                className={`fixed inset-0 bg-black/50 transition-opacity duration-300 ${isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+                className={`fixed inset-0 bg-black/50 transition-opacity duration-300 ${isOpen ? "opacity-100" : "opacity-0 pointer-events-none "
                     }`}
                 onClick={onClose}
             />
-            <div className={`fixed right-0 top-0 h-full w-[500px] bg-white shadow-lg transition-transform duration-300 ${isOpen ? "translate-x-0" : "translate-x-full"
+            <div className={`fixed overflow-y-scroll right-0 top-0 h-full w-[500px] bg-white shadow-lg transition-transform duration-300 ${isOpen ? "translate-x-0" : "translate-x-full"
                 }`}>
                 <div className="p-6 h-full flex flex-col">
                     <div className="flex justify-between items-center mb-6">
@@ -192,16 +189,30 @@ export default function TaskForm({ isOpen, onClose, taskToEdit }: TaskFormProps)
 
                         <div className="space-y-2">
                             <label className="text-sm font-medium">Proyecto</label>
-                            {/* TODO: Agregar un select para seleccionar un proyecto existente, si no existe un proyecto, se debe crear uno nuevo */}
-                            <Input
-                                value={formData.project}
-                                onChange={(e) => {
-                                    setFormData({ ...formData, project: e.target.value })
-                                    validateField("project", e.target.value)
-                                }}
-                                placeholder="Nombre del proyecto"
-                                className={errors.project ? "border-red-500" : ""}
-                            />
+                            {
+                                projects.length > 0 ? (
+                                    <Select
+                                        value={formData.project}
+                                        onValueChange={(value) => {
+                                            setFormData({ ...formData, project: value })
+                                            validateField("project", value)
+                                        }}
+                                    >
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Selecciona un proyecto" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {projects.map((project) => (
+                                                <SelectItem key={project.id} value={project.title}>
+                                                    {project.title}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                ) : (
+                                    <p className="text-sm text-muted-foreground">No hay proyectos disponibles, crea uno nuevo en la sección de proyectos</p>
+                                )
+                            }
                             {errors.project && (
                                 <p className="text-sm text-red-500">{errors.project}</p>
                             )}
@@ -224,8 +235,8 @@ export default function TaskForm({ isOpen, onClose, taskToEdit }: TaskFormProps)
                         </div>
 
                         <div className="mt-auto pt-6">
-                            
-                            <Button type="submit" className="w-full">
+
+                            <Button type="submit" className="w-full mb-4">
                                 {taskToEdit ? "Guardar Cambios" : "Crear Tarea"}
                             </Button>
                         </div>

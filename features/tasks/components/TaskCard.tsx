@@ -1,17 +1,12 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Task } from "../types";
 import { Button } from "@/components/ui/button";
-import { CircleCheckBig, LoaderCircle, CircleAlert, Pencil, Trash, EllipsisVertical } from "lucide-react";
+import { CircleCheckBig, LoaderCircle, CircleAlert, Pencil, Trash } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTaskStore } from "../store/useTaskStore";
+import { useProjectStore } from "@/features/projects/store/useProjectStore";
 import { useState } from "react";
 import TaskForm from "./TaskForm";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -23,11 +18,12 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { toast } from "sonner";
+import { showSuccessToast, showDeleteToast } from "@/lib/toast";
 
 export default function TaskCard({ task }: { task: Task }) {
     const { title, description, project, status, priority }: Task = task;
     const { deleteTask, updateTask } = useTaskStore();
+    const { updateProjectStats } = useProjectStore();
     const [isFormOpen, setIsFormOpen] = useState(false);
 
     const statusConfig = {
@@ -50,16 +46,31 @@ export default function TaskCard({ task }: { task: Task }) {
             ...task,
             status: "Completada"
         });
+
+        if (project) {
+            updateProjectStats(project);
+        }
+
+        showSuccessToast("Tarea marcada como completada", {
+            label: "Deshacer",
+            onClick: () => {
+                updateTask({
+                    ...task,
+                    status: "Pendiente"
+                });
+                if (project) {
+                    updateProjectStats(project);
+                }
+            }
+        });
     };
 
     const handleDelete = () => {
         deleteTask(task.id);
-        toast("Tarea eliminada correctamente", {
-            action: {
-                label: "Deshacer",
-                onClick: () => console.log("Undo"),
-            },
-        });
+        if (project) {
+            updateProjectStats(project);
+        }
+        showDeleteToast("Tarea eliminada correctamente");
     };
 
     return (
@@ -88,9 +99,9 @@ export default function TaskCard({ task }: { task: Task }) {
                                             <AlertDialogHeader>
                                                 <AlertDialogTitle>¿Estás seguro?</AlertDialogTitle>
                                                 <AlertDialogDescription>
-                                                    Esta acción no se puede deshacer. Se eliminará permanentemente la tarea `{title}`.         
+                                                    Esta acción no se puede deshacer. Se eliminará permanentemente la tarea `{title}`.
                                                 </AlertDialogDescription>
-                                            </AlertDialogHeader>    
+                                            </AlertDialogHeader>
                                             <AlertDialogFooter>
                                                 <AlertDialogCancel>Cancelar</AlertDialogCancel>
                                                 <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
@@ -101,22 +112,9 @@ export default function TaskCard({ task }: { task: Task }) {
                                     </AlertDialog>
                                     {
                                         status !== "Completada" && (
-                                            <DropdownMenu>
-                                                <DropdownMenuTrigger asChild>
-                                                    <Button variant="ghost" size="sm" className="hover:bg-accent">
-                                                        <EllipsisVertical className="h-4 w-4" />
-                                                    </Button>
-                                                </DropdownMenuTrigger>
-                                                <DropdownMenuContent align="end">
-                                                    <DropdownMenuItem
-                                                        onClick={handleMarkAsCompleted}
-                                                        className="flex items-center gap-2"
-                                                    >
-                                                        <CircleCheckBig className="h-4 w-4" />
-                                                        <span>Marcar como completada</span>
-                                                    </DropdownMenuItem>
-                                                </DropdownMenuContent>
-                                            </DropdownMenu>
+                                            <Button variant="ghost" size="sm" className="hover:bg-green-500/10 hover:text-green-500" onClick={handleMarkAsCompleted}>
+                                                <CircleCheckBig className="h-4 w-4" />
+                                            </Button>
                                         )
                                     }
                                 </div>
