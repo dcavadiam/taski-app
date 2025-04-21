@@ -24,7 +24,7 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
     }, [id, tasks, updateProjectStats]);
 
     return (
-        <section className="max-lg:mt-8 p-6 rounded-xl bg-accent min-h-[calc(100vh-2rem)] h-auto lg:overflow-y-scroll py-4 px-5 flex flex-col gap-4">
+        <section className="max-lg:mt-8 p-6 rounded-xl bg-accent lg:h-[calc(100vh-2rem)] h-auto lg:overflow-y-scroll py-4 px-5 flex flex-col gap-4 shadow-lg">
             {/* Botón de navegación */}
             <Link
                 href="/dashboard/projects"

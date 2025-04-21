@@ -19,7 +19,7 @@ export default function ProjectsPage() {
     }
 
     return (
-        <div className="max-lg:mt-8 p-6 rounded-xl bg-accent min-h-[calc(100vh-2rem)] h-auto lg:overflow-y-scroll py-4 px-5 flex flex-col gap-4">
+        <div className="max-lg:mt-8 p-6 rounded-xl bg-accent lg:h-[calc(100vh-2rem)] h-auto lg:overflow-y-scroll py-4 px-5 flex flex-col gap-4 shadow-lg">
             <div className="flex flex-col lg:flex-row justify-between lg:items-center mb-6 lg:gap-6 gap-2">
                 <div>
                     <h1 className="text-3xl font-bold">Proyectos</h1>
