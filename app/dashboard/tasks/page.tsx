@@ -14,13 +14,25 @@ import { useTaskStore } from "@/features/tasks/store/useTaskStore"
 export default function TasksPage() {
     const { tasks } = useTaskStore()
     const [isFormOpen, setIsFormOpen] = useState(false)
+    const [statusFilter, setStatusFilter] = useState<string | undefined>(undefined)
+
+    const handleStatusChange = (value: string) => {
+        setStatusFilter(value)
+    }
+
+    const filteredTasks = tasks.filter((task) => {
+        if (statusFilter) {
+            return task.status === statusFilter
+        }
+        return true
+    })
 
     return (
         <section className="p-6 rounded-xl bg-accent h-[calc(100vh-2rem)] overflow-y-scroll py-4 px-5 flex flex-col gap-4">
             <h1 className="text-3xl font-bold">Tareas</h1>
             <div className="flex justify-between items-center mb-6 gap-6">
                 <Input placeholder="Buscar tarea" className="bg-white text-black hover:bg-white/80" />
-                <TaskStatusSelect />
+                <TaskStatusSelect value={statusFilter} onValueChange={handleStatusChange} />
                 <OrderDateSelect />
                 <Button onClick={() => setIsFormOpen(true)}>
                     <Plus className="h-4 w-4" />
@@ -30,8 +42,8 @@ export default function TasksPage() {
 
             <div className="space-y-4">
                 {
-                    tasks.length > 0 ? (
-                        tasks.map((task: Task) => (
+                    filteredTasks.length > 0 ? (
+                        filteredTasks.map((task: Task) => (
                             <TaskCard key={task.id} task={task} />
                         ))
                     ) : (
