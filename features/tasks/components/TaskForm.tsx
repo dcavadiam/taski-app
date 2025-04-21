@@ -115,7 +115,7 @@ export default function TaskForm({ isOpen, onClose, taskToEdit }: TaskFormProps)
                     }`}
                 onClick={onClose}
             />
-            <div className={`fixed overflow-y-scroll right-0 top-0 max-lg:pt-8 h-full w-full sm:w-[500px] bg-white shadow-lg transition-transform duration-300 ${isOpen ? "translate-x-0" : "translate-x-full"
+            <div className={`fixed overflow-y-scroll right-0 top-0 max-lg:pt-8 h-full w-full sm:w-[500px] bg-white dark:bg-gray-800 shadow-lg transition-transform duration-300 ${isOpen ? "translate-x-0" : "translate-x-full"
                 }`}>
                 <div className="p-4 sm:p-6 h-full flex flex-col">
                     <div className="flex justify-between items-center mb-4 sm:mb-6">

@@ -5,6 +5,7 @@ import "@/app/globals.css";
 import Sidebar from "@/components/layout/Sidebar";
 import { Toaster } from "sonner";
 import StorageProvider from "@/components/providers/StorageProvider";
+import { ThemeProvider } from "@/components/providers/ThemeProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,13 +32,20 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex h-screen p-4`}
       >
-        <StorageProvider>
-          <Sidebar />
-          <main className="flex-1">
-            {children}
-          </main>
-          <Toaster />
-        </StorageProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <StorageProvider>
+            <Sidebar />
+            <main className="flex-1">
+              {children}
+            </main>
+            <Toaster />
+          </StorageProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

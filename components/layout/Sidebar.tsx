@@ -1,16 +1,19 @@
 'use client'
 import Link from "next/link";
 import { useState } from "react";
-import { SquareCheckBig, Folder, ListCheck, Menu, X, HomeIcon } from "lucide-react"
+import { SquareCheckBig, Folder, ListCheck, Menu, X, HomeIcon, Moon, Sun } from "lucide-react"
+import { useTheme } from "next-themes"
+import { Button } from "@/components/ui/button"
 
 export default function Sidebar() {
     const [isOpen, setIsOpen] = useState(false);
+    const { theme, setTheme } = useTheme();
 
     return (
         <>
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className={`lg:hidden fixed z-50 p-1.5 rounded-md bg-white dark:bg-gray-800 shadow-sm border border-gray-200 dark:border-gray-700 transition-all duration-300 ease-in-out ${isOpen ? 'left-[11rem]' : 'left-2'} top-2`}>
+                className={`lg:hidden fixed z-50 p-1.5 rounded-md bg-white dark:bg-gray-800 shadow-sm border border-gray-200 dark:border-gray-700 transition-all duration-300 ease-in-out ${isOpen ? 'left-[13rem]' : 'left-2'} top-2`}>
                 {isOpen ? <X size={20} className="text-gray-600 dark:text-gray-300" /> : <Menu size={20} className="text-gray-600 dark:text-gray-300" />}
             </button>
 
@@ -21,7 +24,7 @@ export default function Sidebar() {
                 />
             )}
 
-            <aside className={`fixed lg:static w-[14rem] h-full p-4 top-0 left-0 flex flex-col gap-6 bg-white dark:bg-gray-800 transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'} z-40`}>
+            <aside className={`fixed lg:static top-0 left-0 lg:h-[calc(100vh-1rem)] h-screen max-lg:bg-white max-lg:dark:bg-gray-700 w-56 p-6 flex flex-col gap-8 transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'} z-50`}>
                 <h1 className="flex items-center gap-1 text-2xl font-bold">
                     <SquareCheckBig strokeWidth={2.5} />
                     Taski
@@ -60,6 +63,28 @@ export default function Sidebar() {
                         </li>
                     </ul>
                 </nav>
+                <div className="mt-auto">
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                        className="w-fit justify-start text-sm font-semibold p-2 rounded-md "
+                    >
+                        {theme === "dark" ? (
+                            <>
+                                Claro
+                                <Sun className="h-4 w-4 mr-2" />
+
+                            </>
+                        ) : (
+                            <>
+                                Oscuro
+                                <Moon className="h-4 w-4 mr-2" />
+
+                            </>
+                        )}
+                    </Button>
+                </div>
             </aside>
         </>
     )

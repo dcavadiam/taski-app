@@ -16,28 +16,28 @@ const getToastStyle = (type: ToastType) => {
   switch (type) {
     case "success":
       return {
-        background: "linear-gradient(to right, #ffffff, #96c93d)",
+        background: "#96c93d",
         icon: "🚀",
       };
     case "error":
       return {
-        background: "linear-gradient(to right, #ffffff, #FF3737)",
+        background: "#FF3737",
         icon: "🚫",
       };
     case "warning":
       return {
-        background: "linear-gradient(to right, #ffffff, #FFA500)",
+        background: "#FFA500",
         icon: "⚠️",
       };
     case "info":
     default:
       return {
-        background: "linear-gradient(to right, #ffffff, #3B82F6)",
+        background: "#3B82F6",
         icon: "ℹ️",
       };
     case "delete":
       return {
-        background: "linear-gradient(to right, #ffffff, #FF0000)",
+        background: "#FF0000",
         icon: "🗑️",
       };
   }

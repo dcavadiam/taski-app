@@ -14,7 +14,7 @@ interface OrderDateSelectProps {
 export default function OrderDateSelect({ value, onValueChange }: OrderDateSelectProps) {
     return (
         <Select value={value} onValueChange={onValueChange}>
-            <SelectTrigger className="w-[180px] bg-white text-black hover:bg-white/80">
+            <SelectTrigger className="w-[180px] bg-white text-black dark:text-white hover:bg-white/80">
                 <SelectValue placeholder="Ordenar por fecha" />
             </SelectTrigger>
             <SelectContent>
