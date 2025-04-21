@@ -50,17 +50,17 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
                     </div>
                     <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm">
                         <div className="flex items-center gap-2">
-                            <CalendarDays className="w-5 h-5 text-green-500" />
-                            <span className="font-medium">Fecha de Creación</span>
-                        </div>
-                        <p className="text-2xl font-bold mt-2">{new Date(project.dueDate).toLocaleDateString()}</p>
-                    </div>
-                    <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm">
-                        <div className="flex items-center gap-2">
                             <Clock className="w-5 h-5 text-purple-500" />
                             <span className="font-medium">Progreso</span>
                         </div>
                         <p className="text-2xl font-bold mt-2">{project.progress}%</p>
+                    </div>
+                    <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm">
+                        <div className="flex items-center gap-2">
+                            <CalendarDays className="w-5 h-5 text-green-500" />
+                            <span className="font-medium">Estado</span>
+                        </div>
+                        <p className="text-2xl font-bold mt-2">{project.status}</p>
                     </div>
                 </div>
             </div>

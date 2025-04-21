@@ -4,15 +4,36 @@ import { useTaskStore } from "@/features/tasks/store/useTaskStore";
 
 export const useProjectStore = create<ProjectStore>((set) => ({
   projects: [],
-  setProjects: (projects: Project[]) => set({ projects }),
-  addProject: (project: Project) => set((state) => ({ projects: [...state.projects, project] })),
-  updateTitleProject: (id: string, title: string) => set((state) => ({ projects: state.projects.map((p) => (p.id === id ? { ...p, title } : p)) })),
-  deleteProject: (id: string) => set((state) => ({ projects: state.projects.filter((p) => p.id !== id) })),
+  setProjects: (projects: Project[]) => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('projects', JSON.stringify(projects));
+    }
+    set({ projects });
+  },
+  addProject: (project: Project) => set((state) => {
+    const newProjects = [...state.projects, project];
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('projects', JSON.stringify(newProjects));
+    }
+    return { projects: newProjects };
+  }),
+  updateTitleProject: (id: string, title: string) => set((state) => {
+    const newProjects = state.projects.map((p) => (p.id === id ? { ...p, title } : p));
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('projects', JSON.stringify(newProjects));
+    }
+    return { projects: newProjects };
+  }),
+  deleteProject: (id: string) => set((state) => {
+    const newProjects = state.projects.filter((p) => p.id !== id);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('projects', JSON.stringify(newProjects));
+    }
+    return { projects: newProjects };
+  }),
   updateProjectStats: (projectName: string) => {
     const tasks = useTaskStore.getState().tasks;
     const projectTasks = tasks.filter(task => task.project === projectName);
-
-    console.log(projectTasks);
 
     if (projectTasks.length === 0) return;
 
@@ -29,8 +50,8 @@ export const useProjectStore = create<ProjectStore>((set) => ({
       status = "En progreso";
     }
 
-    set((state) => ({
-      projects: state.projects.map((p) =>
+    set((state) => {
+      const newProjects = state.projects.map((p) =>
         p.title === projectName
           ? {
             ...p,
@@ -41,7 +62,11 @@ export const useProjectStore = create<ProjectStore>((set) => ({
             inProgressTasks
           }
           : p
-      )
-    }));
+      );
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('projects', JSON.stringify(newProjects));
+      }
+      return { projects: newProjects };
+    });
   }
 }));
