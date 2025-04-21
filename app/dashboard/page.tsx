@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <section className="flex flex-col w-full rounded-xl bg-accent h-[calc(100vh-2rem)] overflow-y-scroll py-6 px-8">
+    <section className="max-lg:mt-8 flex flex-col w-full rounded-xl bg-accent min-h-[calc(100vh-2rem)] h-auto max-lg:min-h-screen lg:overflow-y-auto py-6 px-8">
       <div className="flex flex-col mb-8">
         <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
           ¡Bienvenido a Taski!

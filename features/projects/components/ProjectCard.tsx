@@ -32,7 +32,7 @@ export default function ProjectCard({ project, getStatusColor }: ProjectCardProp
                         <Progress value={progress} className="h-2" />
                     </div>
 
-                    <div className="flex justify-between items-center pt-4">
+                    <div className="flex flex-col xl:flex-row xl:justify-between xl:items-center gap-2 xl:gap-4 pt-4">
                         <div className="flex gap-4">
                             <div className="flex items-center gap-1">
                                 <CheckCircle2 className="h-4 w-4 text-green-500" />

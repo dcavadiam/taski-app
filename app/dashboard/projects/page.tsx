@@ -19,8 +19,8 @@ export default function ProjectsPage() {
     }
 
     return (
-        <div className="p-6 rounded-xl bg-accent h-[calc(100vh-2rem)] overflow-y-scroll py-4 px-5 flex flex-col gap-4">
-            <div className="flex justify-between items-center mb-6">
+        <div className="max-lg:mt-8 p-6 rounded-xl bg-accent min-h-[calc(100vh-2rem)] h-auto lg:overflow-y-scroll py-4 px-5 flex flex-col gap-4">
+            <div className="flex flex-col lg:flex-row justify-between lg:items-center mb-6 lg:gap-6 gap-2">
                 <div>
                     <h1 className="text-3xl font-bold">Proyectos</h1>
                     <p className="text-muted-foreground mt-1">Gestiona y monitorea tus proyectos activos</p>

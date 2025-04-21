@@ -76,23 +76,23 @@ export default function TaskCard({ task }: { task: Task }) {
     return (
         <>
             <Card className="group hover:shadow-md transition-all duration-200">
-                <CardContent className="py-4 px-6">
-                    <div className="flex gap-4 items-start">
+                <CardContent className="py-3 sm:py-4 px-4 sm:px-6">
+                    <div className="flex gap-2 sm:gap-4 items-start">
                         <div className="pt-1">
-                            <StatusIcon className={cn("h-6 w-6", statusColor)} />
+                            <StatusIcon className={cn("h-5 w-5 sm:h-6 sm:w-6", statusColor)} />
                         </div>
 
-                        <div className="flex-1 space-y-2">
+                        <div className="flex-1 space-y-1.5 sm:space-y-2">
                             <div className="flex items-center justify-between">
-                                <h3 className="font-medium text-lg group-hover:text-primary transition-colors">{title}</h3>
-                                <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <Button variant="ghost" size="sm" className="hover:bg-accent" onClick={() => setIsFormOpen(true)}>
-                                        <Pencil className="h-4 w-4" />
+                                <h3 className="font-medium text-base sm:text-lg group-hover:text-primary transition-colors">{title}</h3>
+                                <div className="flex gap-1 sm:gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <Button variant="ghost" size="sm" className="hover:bg-accent p-1.5 sm:p-2" onClick={() => setIsFormOpen(true)}>
+                                        <Pencil className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                                     </Button>
                                     <AlertDialog>
                                         <AlertDialogTrigger asChild>
-                                            <Button variant="ghost" size="sm" className="hover:bg-destructive/10 hover:text-destructive">
-                                                <Trash className="h-4 w-4" />
+                                            <Button variant="ghost" size="sm" className="hover:bg-destructive/10 hover:text-destructive p-1.5 sm:p-2">
+                                                <Trash className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                                             </Button>
                                         </AlertDialogTrigger>
                                         <AlertDialogContent>
@@ -120,16 +120,16 @@ export default function TaskCard({ task }: { task: Task }) {
                                 </div>
                             </div>
 
-                            <p className="text-sm text-muted-foreground line-clamp-2">{description}</p>
+                            <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2">{description}</p>
 
-                            <div className="flex items-center gap-4">
+                            <div className="flex flex-wrap items-center gap-2 sm:gap-4">
                                 <span className={cn(
-                                    "text-xs px-2 py-1 rounded-full font-medium",
+                                    "text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full font-medium",
                                     priorityConfig[priority as keyof typeof priorityConfig]
                                 )}>
                                     {priority}
                                 </span>
-                                <span className="text-sm text-muted-foreground">
+                                <span className="text-xs sm:text-sm text-muted-foreground">
                                     {
                                         project ? (
                                             <span className="font-medium">Proyecto: {project}</span>

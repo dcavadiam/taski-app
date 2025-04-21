@@ -115,17 +115,17 @@ export default function TaskForm({ isOpen, onClose, taskToEdit }: TaskFormProps)
                     }`}
                 onClick={onClose}
             />
-            <div className={`fixed overflow-y-scroll right-0 top-0 h-full w-[500px] bg-white shadow-lg transition-transform duration-300 ${isOpen ? "translate-x-0" : "translate-x-full"
+            <div className={`fixed overflow-y-scroll right-0 top-0 max-lg:pt-8 h-full w-full sm:w-[500px] bg-white shadow-lg transition-transform duration-300 ${isOpen ? "translate-x-0" : "translate-x-full"
                 }`}>
-                <div className="p-6 h-full flex flex-col">
-                    <div className="flex justify-between items-center mb-6">
-                        <h2 className="text-2xl font-bold">{taskToEdit ? "Editar Tarea" : "Nueva Tarea"}</h2>
+                <div className="p-4 sm:p-6 h-full flex flex-col">
+                    <div className="flex justify-between items-center mb-4 sm:mb-6">
+                        <h2 className="text-xl sm:text-2xl font-bold">{taskToEdit ? "Editar Tarea" : "Nueva Tarea"}</h2>
                         <Button variant="ghost" size="icon" onClick={onClose}>
                             <X className="h-4 w-4" />
                         </Button>
                     </div>
 
-                    <form onSubmit={handleSubmit} className="flex-1 flex flex-col gap-4">
+                    <form onSubmit={handleSubmit} className="flex-1 flex flex-col gap-3 sm:gap-4">
                         <div className="space-y-2">
                             <label className="text-sm font-medium">Título</label>
                             <Input
