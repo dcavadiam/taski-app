@@ -2,7 +2,7 @@ import { Task } from "../types";
 
 export const tasks: Task[] = [
   {
-    id: 1,
+    id: "1",
     title: "Tarea 1",
     description: "Descripción de la tarea 1",
     dueDate: "2024-01-01",
@@ -11,7 +11,7 @@ export const tasks: Task[] = [
     priority: "Alta" as const,
   },
   {
-    id: 2,
+    id: "2",
     title: "Tarea 2",
     description: "Descripción de la tarea 2",
     dueDate: "2024-01-02",
@@ -20,7 +20,7 @@ export const tasks: Task[] = [
     priority: "Media" as const,
   },
   {
-    id: 3,
+    id: "3",
     title: "Tarea 3",
     description: "Descripción de la tarea 3",
     dueDate: "2024-01-03",
