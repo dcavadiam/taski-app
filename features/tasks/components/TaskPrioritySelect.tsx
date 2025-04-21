@@ -8,7 +8,7 @@ export default function TaskPrioritySelect({ value, onValueChange, errors }: Tas
             value={value}
             onValueChange={onValueChange}
         >
-            <SelectTrigger className={errors?.priority ? "border-red-500" : ""}>
+            <SelectTrigger className={errors?.priority ? "border-red-500" : "bg-white text-black hover:bg-white/80"}>
                 <SelectValue placeholder="Seleccionar prioridad" />
             </SelectTrigger>
             <SelectContent>
