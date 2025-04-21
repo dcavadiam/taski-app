@@ -4,7 +4,6 @@ export interface Project {
   description: string;
   progress: number;
   status: string;
-  dueDate: string;
   pendingTasks: number;
   completedTasks: number;
   inProgressTasks: number;

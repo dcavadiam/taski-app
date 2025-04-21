@@ -9,15 +9,17 @@ import { useProjectStore } from "../store/useProjectStore";
 import { Plus, Pencil } from "lucide-react";
 import { CreateProjectModalProps } from "../types";
 import { showSuccessToast, showErrorToast } from "@/lib/toast";
-
+import { projectFormSchema, projectSchema, ProjectFormData } from "../schemas/project.schema";
+import { ZodError } from "zod";
 
 export default function CreateProjectModal({ project, mode = 'create' }: CreateProjectModalProps) {
     const [open, setOpen] = useState(false);
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState<Partial<ProjectFormData>>({
         title: "",
         description: "",
-        status: "En progreso",
+        status: "Pendiente" as const,
     });
+    const [errors, setErrors] = useState<Record<string, string>>({});
 
     const { projects, setProjects } = useProjectStore();
 
@@ -26,53 +28,84 @@ export default function CreateProjectModal({ project, mode = 'create' }: CreateP
             setFormData({
                 title: project.title,
                 description: project.description,
-                status: project.status,
+                status: project.status as "Pendiente" | "En progreso" | "Completado",
             });
         }
     }, [project, mode]);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const validateField = (field: keyof ProjectFormData, value: unknown) => {
+        try {
+            projectFormSchema.shape[field].parse(value);
+            setErrors(prev => {
+                const newErrors = { ...prev };
+                delete newErrors[field];
+                return newErrors;
+            });
+        } catch (error) {
+            if (error instanceof ZodError) {
+                setErrors(prev => ({
+                    ...prev,
+                    [field]: error.errors[0].message
+                }));
+            }
+        }
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        try {
+            const validatedFormData = projectFormSchema.parse(formData);
 
-        // Verificar duplicados excluyendo el proyecto actual en modo edición
-        const isDuplicate = projects.some(p =>
-            p.title === formData.title &&
-            (!project || p.id !== project.id)
-        );
-
-        if (isDuplicate) {
-            showErrorToast("El proyecto ya existe");
-            return;
-        }
-
-        if (mode === 'create') {
-            const newProject = {
-                id: Date.now().toString(),
-                title: formData.title,
-                description: formData.description,
-                status: formData.status,
-                progress: 0,
-                dueDate: new Date().toISOString(),
-                pendingTasks: 0,
-                completedTasks: 0,
-                inProgressTasks: 0,
-            };
-
-            const updatedProjects = [...projects, newProject];
-            setProjects(updatedProjects);
-            showSuccessToast("Proyecto creado correctamente");
-        } else if (project) {
-            const updatedProjects = projects.map(p =>
-                p.id === project.id
-                    ? { ...p, title: formData.title, description: formData.description }
-                    : p
+            // Verificar duplicados excluyendo el proyecto actual en modo edición
+            const isDuplicate = projects.some(p =>
+                p.title === validatedFormData.title &&
+                (!project || p.id !== project.id)
             );
-            setProjects(updatedProjects);
-            showSuccessToast("Proyecto actualizado correctamente");
-        }
 
-        setOpen(false);
-        setFormData({ title: "", description: "", status: "Pendiente" });
+            if (isDuplicate) {
+                showErrorToast("El proyecto ya existe");
+                return;
+            }
+
+            if (mode === 'create') {
+                const newProject = projectSchema.parse({
+                    ...validatedFormData,
+                    id: Date.now().toString(),
+                    progress: 0,
+                    pendingTasks: 0,
+                    completedTasks: 0,
+                    inProgressTasks: 0,
+                });
+                const updatedProjects = [...projects, newProject];
+                setProjects(updatedProjects);
+                showSuccessToast("Proyecto creado correctamente");
+            } else if (project) {
+                const updatedProject = projectSchema.parse({
+                    ...project,
+                    ...validatedFormData,
+                });
+                const updatedProjects = projects.map(p =>
+                    p.id === project.id ? updatedProject : p
+                );
+                setProjects(updatedProjects);
+                showSuccessToast("Proyecto actualizado correctamente");
+            }
+
+            setOpen(false);
+            setFormData({ title: "", description: "", status: "Pendiente" as const });
+            setErrors({});
+        } catch (error) {
+            if (error instanceof ZodError) {
+                const newErrors: Record<string, string> = {};
+                error.errors.forEach((err) => {
+                    if (err.path) {
+                        newErrors[err.path[0]] = err.message;
+                    }
+                });
+                setErrors(newErrors);
+                showErrorToast("Por favor, corrige los errores en el formulario");
+            }
+        }
     };
 
     return (
@@ -93,20 +126,38 @@ export default function CreateProjectModal({ project, mode = 'create' }: CreateP
                         <Input
                             id="title"
                             value={formData.title}
-                            onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                            onChange={(e) => {
+                                setFormData({ ...formData, title: e.target.value });
+                                validateField('title', e.target.value);
+                            }}
                             placeholder="Nombre del proyecto"
-                            required
+                            aria-invalid={!!errors.title}
+                            aria-describedby={errors.title ? "title-error" : undefined}
                         />
+                        {errors.title && (
+                            <p className="text-sm text-destructive" id="title-error">
+                                {errors.title}
+                            </p>
+                        )}
                     </div>
                     <div className="space-y-2">
                         <Label htmlFor="description">Descripción</Label>
                         <Textarea
                             id="description"
                             value={formData.description}
-                            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                            onChange={(e) => {
+                                setFormData({ ...formData, description: e.target.value });
+                                validateField('description', e.target.value);
+                            }}
                             placeholder="Describe tu proyecto"
-                            required
+                            aria-invalid={!!errors.description}
+                            aria-describedby={errors.description ? "description-error" : undefined}
                         />
+                        {errors.description && (
+                            <p className="text-sm text-destructive" id="description-error">
+                                {errors.description}
+                            </p>
+                        )}
                     </div>
                     <Button type="submit" className="w-full">
                         {mode === 'create' ? 'Crear Proyecto' : 'Guardar Cambios'}
