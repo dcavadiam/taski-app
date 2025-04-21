@@ -18,7 +18,7 @@ export default function TasksPage() {
     const [statusFilter, setStatusFilter] = useState<string | undefined>(undefined)
     const [priorityFilter, setPriorityFilter] = useState<string | undefined>(undefined)
     const [orderDate, setOrderDate] = useState<string | undefined>(undefined)
-
+    const [search, setSearch] = useState<string>("")
 
     const handleStatusChange = (value: string) => {
         setStatusFilter(value)
@@ -32,10 +32,15 @@ export default function TasksPage() {
         setOrderDate(value)
     }
 
+    const handleSearchChange = (value: string) => {
+        setSearch(value)
+    }
+
     const filteredTasks = tasks.filter((task) => {
         const matchesStatus = !statusFilter || task.status === statusFilter;
         const matchesPriority = !priorityFilter || task.priority === priorityFilter;
-        return matchesStatus && matchesPriority;
+        const matchesSearch = !search || task.title.toLowerCase().includes(search.toLowerCase());
+        return matchesStatus && matchesPriority && matchesSearch;
     });
 
     const sortedTasks = filteredTasks.sort((a, b) => {
@@ -54,7 +59,7 @@ export default function TasksPage() {
         <section className="p-6 rounded-xl bg-accent h-[calc(100vh-2rem)] overflow-y-scroll py-4 px-5 flex flex-col gap-4">
             <h1 className="text-3xl font-bold">Tareas</h1>
             <div className="flex justify-between items-center mb-6 gap-6">
-                <Input placeholder="Buscar tarea" className="bg-white text-black hover:bg-white/80" />
+                <Input placeholder="Buscar tarea" className="bg-white text-black hover:bg-white/80" onChange={(e) => handleSearchChange(e.target.value)} />
                 <TaskStatusSelect value={statusFilter} onValueChange={handleStatusChange} />
                 <TaskPrioritySelect value={priorityFilter} onValueChange={handlePriorityChange} />
                 <OrderDateSelect value={orderDate} onValueChange={handleOrderDateChange} />
