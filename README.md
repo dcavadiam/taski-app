@@ -1,36 +1,93 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Taski App
 
-## Getting Started
+Taski es una aplicación web moderna para la gestión de tareas, construida con Next.js y TypeScript, siguiendo los principios de Feature-based + Atomic Design.
 
-First, run the development server:
+## 🚀 Cómo ejecutar el proyecto
+
+1. Clona el repositorio:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/dcavadiam/taski-app.git
+cd taski-app
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Instala las dependencias:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+pnpm install
+# o
+yarn install
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+3. Inicia el servidor de desarrollo:
 
-## Learn More
+```bash
+pnpm dev
+# o
+yarn dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+4. Abre [http://localhost:3000](http://localhost:3000) en tu navegador.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🏗️ Arquitectura
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+La aplicación sigue una arquitectura moderna y escalable:
 
-## Deploy on Vercel
+### Estructura del Proyecto
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
+taski-app/
+├── app/                 # Next.js App Router
+├── components/          # Componentes reutilizables
+│   ├── ui/             # Componentes atómicos y moleculares
+│   ├── layout/         # Componentes de layout
+│   └── providers/      # Proveedores de contexto
+├── features/           # Módulos de características
+│   ├── tasks/         # Feature de tareas
+│   └── projects/      # Feature de proyectos
+└── lib/               # Utilidades y configuraciones
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Tecnologías Principales
+
+- **Frontend**: Next.js 15 con App Router
+- **Lenguaje**: TypeScript
+- **Estilado**: Tailwind CSS
+- **UI Components**: ShadcnUI
+- **Deployment**: Vercel
+
+## 💡 Decisiones técnicas clave
+
+1. **Arquitectura Feature-based + Atomic Design**:
+
+   - Organización por características para mejor escalabilidad
+   - Componentes atómicos reutilizables
+   - Separación clara de responsabilidades
+
+2. **Next.js App Router**:
+
+   - Renderizado del lado del servidor optimizado
+   - Enrutamiento basado en el sistema de archivos
+   - Mejor rendimiento y SEO
+
+3. **TypeScript**:
+
+   - Seguridad de tipos
+   - Mejor mantenibilidad del código
+   - Autocompletado mejorado
+
+4. **Tailwind CSS + ShadcnUI**:
+   - Desarrollo rápido y consistente
+   - Componentes UI accesibles y personalizables
+   - Sistema de diseño coherente
+
+## 🌐 Repositorio público
+
+El código fuente está disponible en GitHub:
+[https://github.com/dcavadiam/taski-app](https://github.com/dcavadiam/taski-app)
+
+## 🚀 Deploy en Vercel
+
+La aplicación está desplegada en Vercel.
+
+URL de producción: [https://taski-app.vercel.app](https://taski-app.vercel.app)
