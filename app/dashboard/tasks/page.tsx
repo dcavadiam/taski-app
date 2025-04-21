@@ -17,6 +17,7 @@ export default function TasksPage() {
     const [isFormOpen, setIsFormOpen] = useState(false)
     const [statusFilter, setStatusFilter] = useState<string | undefined>(undefined)
     const [priorityFilter, setPriorityFilter] = useState<string | undefined>(undefined)
+    const [orderDate, setOrderDate] = useState<string | undefined>(undefined)
 
 
     const handleStatusChange = (value: string) => {
@@ -27,11 +28,27 @@ export default function TasksPage() {
         setPriorityFilter(value)
     }
 
+    const handleOrderDateChange = (value: string) => {
+        setOrderDate(value)
+    }
+
     const filteredTasks = tasks.filter((task) => {
         const matchesStatus = !statusFilter || task.status === statusFilter;
         const matchesPriority = !priorityFilter || task.priority === priorityFilter;
         return matchesStatus && matchesPriority;
     });
+
+    const sortedTasks = filteredTasks.sort((a, b) => {
+        if (orderDate === "asc") {
+            const dateA = a.dueDate ? new Date(a.dueDate) : new Date(); // Si no hay fecha, se usa la fecha actual
+            const dateB = b.dueDate ? new Date(b.dueDate) : new Date(); // Si no hay fecha, se usa la fecha actual
+            return dateA.getTime() - dateB.getTime();
+        } else {
+            const dateA = a.dueDate ? new Date(a.dueDate) : new Date(); // Si no hay fecha, se usa la fecha actual
+            const dateB = b.dueDate ? new Date(b.dueDate) : new Date(); // Si no hay fecha, se usa la fecha actual
+            return dateB.getTime() - dateA.getTime();
+        }
+    })
 
     return (
         <section className="p-6 rounded-xl bg-accent h-[calc(100vh-2rem)] overflow-y-scroll py-4 px-5 flex flex-col gap-4">
@@ -40,7 +57,7 @@ export default function TasksPage() {
                 <Input placeholder="Buscar tarea" className="bg-white text-black hover:bg-white/80" />
                 <TaskStatusSelect value={statusFilter} onValueChange={handleStatusChange} />
                 <TaskPrioritySelect value={priorityFilter} onValueChange={handlePriorityChange} />
-                <OrderDateSelect />
+                <OrderDateSelect value={orderDate} onValueChange={handleOrderDateChange} />
                 <Button onClick={() => setIsFormOpen(true)}>
                     <Plus className="h-4 w-4" />
                     Nueva Tarea
@@ -49,8 +66,8 @@ export default function TasksPage() {
 
             <div className="space-y-4">
                 {
-                    filteredTasks.length > 0 ? (
-                        filteredTasks.map((task: Task) => (
+                    sortedTasks.length > 0 ? (
+                        sortedTasks.map((task: Task) => (
                             <TaskCard key={task.id} task={task} />
                         ))
                     ) : (
