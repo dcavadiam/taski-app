@@ -85,7 +85,7 @@ export default function TaskCard({ task }: { task: Task }) {
                         <div className="flex-1 space-y-1.5 sm:space-y-2">
                             <div className="flex items-center justify-between">
                                 <h3 className="font-medium text-base sm:text-lg group-hover:text-primary transition-colors">{title}</h3>
-                                <div className="flex gap-1 sm:gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <div className="flex gap-1 sm:gap-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
                                     <Button variant="ghost" size="sm" className="hover:bg-accent p-1.5 sm:p-2" onClick={() => setIsFormOpen(true)}>
                                         <Pencil className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                                     </Button>

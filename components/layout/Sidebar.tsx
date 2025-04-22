@@ -13,7 +13,7 @@ export default function Sidebar() {
         <>
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className={`lg:hidden fixed z-50 p-1.5 rounded-md bg-white dark:bg-gray-800 shadow-sm border border-gray-200 dark:border-gray-700 transition-all duration-300 ease-in-out ${isOpen ? 'left-[13rem]' : 'left-2'} top-2`}>
+                className={`lg:hidden fixed z-51 p-1.5 rounded-md bg-white dark:bg-gray-800 shadow-sm border border-gray-200 dark:border-gray-700 transition-all duration-300 ease-in-out ${isOpen ? 'left-[11rem]' : 'left-2'} top-2`}>
                 {isOpen ? <X size={20} className="text-gray-600 dark:text-gray-300" /> : <Menu size={20} className="text-gray-600 dark:text-gray-300" />}
             </button>
 
@@ -62,29 +62,30 @@ export default function Sidebar() {
                             </Link>
                         </li>
                     </ul>
+                    <div className="mt-4 border-t dark:border-gray-200 border-gray-700 pt-4">
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                            className="w-fit justify-start text-sm font-semibold p-2 rounded-md "
+                        >
+                            {theme === "dark" ? (
+                                <>
+                                    Claro
+                                    <Sun className="h-4 w-4 mr-2" />
+
+                                </>
+                            ) : (
+                                <>
+                                    Oscuro
+                                    <Moon className="h-4 w-4 mr-2" />
+
+                                </>
+                            )}
+                        </Button>
+                    </div>
                 </nav>
-                <div className="mt-auto">
-                    <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-                        className="w-fit justify-start text-sm font-semibold p-2 rounded-md "
-                    >
-                        {theme === "dark" ? (
-                            <>
-                                Claro
-                                <Sun className="h-4 w-4 mr-2" />
-
-                            </>
-                        ) : (
-                            <>
-                                Oscuro
-                                <Moon className="h-4 w-4 mr-2" />
-
-                            </>
-                        )}
-                    </Button>
-                </div>
+                
             </aside>
         </>
     )
