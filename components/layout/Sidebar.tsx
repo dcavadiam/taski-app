@@ -9,6 +9,10 @@ export default function Sidebar() {
     const [isOpen, setIsOpen] = useState(false);
     const { theme, setTheme } = useTheme();
 
+    const handleTheme = () => {
+        setTheme(theme === "dark" ? "light" : "dark");
+    }
+
     return (
         <>
             <button
@@ -66,26 +70,23 @@ export default function Sidebar() {
                         <Button
                             variant="ghost"
                             size="icon"
-                            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                            onClick={handleTheme}
                             className="w-fit justify-start text-sm font-semibold p-2 rounded-md "
                         >
                             {theme === "dark" ? (
                                 <>
-                                    Claro
-                                    <Sun className="h-4 w-4 mr-2" />
-
+                                    Oscuro
+                                    <Moon className="h-4 w-4 mr-2" />
                                 </>
                             ) : (
                                 <>
-                                    Oscuro
-                                    <Moon className="h-4 w-4 mr-2" />
-
+                                    Claro
+                                    <Sun className="h-4 w-4 mr-2" />
                                 </>
                             )}
                         </Button>
                     </div>
                 </nav>
-                
             </aside>
         </>
     )
